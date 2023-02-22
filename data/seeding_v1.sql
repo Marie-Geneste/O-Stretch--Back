@@ -24,8 +24,7 @@ INSERT INTO "stretch" ("id", "title", "description_content", "main_image", "desc
     (18, "triceps sural","Debout, tendre une jambe et se pencher en avant pour attraper avec la main le pied de la jambe tendue.","",10),
     (18, "Inversion","Faire une pointe avec le pied avec les orteils vers l’intérieur","", 11 ),
     (18, "Eversion ","Basculer le pied côté externe en faisant une flexion dorsale (orienté le pied vers l’extérieur et le haut).","", 11),
- 
-  
+
 
 INSERT INTO "category" ("id", "name") VALUES
     (1, "Cou"),

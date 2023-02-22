@@ -1,124 +1,47 @@
-// librairies
-const express = require('express');
-const bodyParser = require('body-parser');
-const { expressjwt: jwt } = require('express-jwt');
-const jsonwebtoken = require('jsonwebtoken');
+// Charger les variables d'environnements
+require("dotenv/config");
 
-// stretches data
-const stretches = require('./stretches.json');
+// Import des dépendances
+const express = require("express");
+const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 
-// vars
+const router = require("./app/routers");
+
+// Créer l'app
 const app = express();
-const port = 3001;
-const jwtSecret = 'OurSuperLongRandomSecretToSignOurJWTgre5ezg4jyt5j4ui64gn56bd4sfs5qe4erg5t5yjh46yu6knsw4q';
 
-// users data
-const db = {
-    users: [
-        {
-            id: 32,
-            password: 'jennifer',
-            username: 'John',
-            favorites: [1],
-            email: 'bouclierman@herocorp.io',
-        },
-        {
-            id: 55,
-            password: 'fructis',
-            username: 'Burt',
-            favorites: [1],
-            email: 'acidman@herocorp.io',
-        },
-        
-    ]
-};
+// On autorise les requêtes Cross-Origin, qui par défaut seraient bloquées.
+app.use(cors({
+    origin: "*",
+}));
 
-/* Middlewares */
-// parse request body
-app.use(bodyParser.json());
-
-// cors
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-
-    // response to preflight request
-    if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-    }
-    else {
-        next();
-    }
+// On limite le nombre de requête des clients
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100000,
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
-
-// prepare authorization middleware
-const authorizationMiddleware = jwt({ secret: jwtSecret, algorithms: ['HS256'] });
-
-/* Routes */
-// Page d'accueil du serveur : GET /
-app.get('/', (req, res) => {
-    console.log('>> GET /');
-    res.sendFile( __dirname + '/index.html');
-});
-
-// Liste des stretches : GET /stretches
-app.get('/stretches', (req, res) => {
-    console.log('>> GET /stretches');
-    res.json(stretches);
-});
+app.use(limiter);
 
 
-// Login : POST /login
-app.post('/login', (req, res) => {
-    console.log('>> POST /login', req.body);
-    const { email, password } = req.body;
+// Body parsing middlewares
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// authentication
-const user = db.users.find(user => user.email === email && user.password === password);
+//multer
+const multer = require("multer");
+const bodyParser = multer();
 
-// http response
-if (user) {
-    const jwtContent = { userId: user.id };
-    const jwtOptions = { 
-        algorithm: 'HS256', 
-        expiresIn: '3h' 
-        };
-    console.log('<< 200', user.username);
-    res.json({ 
-        logged: true, 
-        pseudo: user.username,
-        token: jsonwebtoken.sign(jwtContent, jwtSecret, jwtOptions),
-    });
-}
-else {
-    console.log('<< 401 UNAUTHORIZED');
-    res.sendStatus(401);
-}
-});
+// on utlise .none() pour dire qu'on attends pas de fichier, uniquement des inputs "classiques" !
+app.use( bodyParser.none() );
 
-// Favorites recipes : GET /bookmarks
-app.get('/bookmarks', authorizationMiddleware, (req, res) => {
-    console.log('>> GET /bookmarks', req.user);
+// Router
+app.use(router);
 
-    const user = db.users.find(user => user.id === req.user.userId);
-    console.log('<< 200');
-    res.json({ 
-        favorites: stretches.filter((stretch) => user.favorites.includes(stretch.id)), 
-});
-});
-
-// Error middleware
-app.use((err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') {
-        console.log('<< 401 UNAUTHORIZED - Invalid Token');
-        res.status(401).send('Invalid token');
-}
-});
-
-/*
- * Server
- */
+// Lancer l'app
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`listening on *:${port}`);
+    console.log(`Listening at http://localhost:${port}`);
 });
