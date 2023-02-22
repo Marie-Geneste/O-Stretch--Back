@@ -2,8 +2,19 @@ const { User } = require("../models");
 
 const emailValidator = require("email-validator");
 const bcrypt = require('bcrypt');
-const jsonwebtoken = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
+function getUserToken(user){
+    const payload = {
+        sub: user.id,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+    });
+
+    return token;
+};
 
 const userController = {
 
@@ -28,6 +39,10 @@ const userController = {
             return res.status(400).json({ errorMessage: "Format d'email non valide" });
         }
 
+        // Vérification du couple mdp / confirmation de mdp
+            if(password !== passwordConfirm) {
+                return res.status(400).json({ errorMessage: `La confirmation de mot de passe ne correspond pas au mot de passe renseigné` });
+            }
         // Comme à partir d'ici on contacte un service extérieur qui nous renvoie une promesse (l'appel à la DB)
         // on utilise le try / catch pour pouvoir gérer un éventuel rejet de la promesse avec une erreur
         try {
@@ -61,25 +76,17 @@ const userController = {
                 password: hashedPassword
             });
 
-            const payload = {
-                user: {
-                    id: newUser.id,
-                },
-            };
+            const token = getUserToken(newUser);
         
-            const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "1h",
-            });
-        
-            res.cookie("jwt", token, {
-                httpOnly: true,
-                secure: true,
-                maxAge: 3600000,
-                sameSite: "none",
-            });
+            // res.cookie("jwt", token, {
+            //     httpOnly: true,
+            //     secure: true,
+            //     maxAge: 3600000,
+            //     sameSite: "strict",
+            // });
         
             res.status(201).json({
-            message: "Utilisateur créé avec succès !",
+            token,
             user: {
                 id: newUser.id,
                 name: newUser.name,
@@ -127,43 +134,20 @@ const userController = {
             return res.status(400).json({ errorMessage: "Email ou mot de passe incorrect" });
         }
 
-        const payload = {
-            user: {
-                id: existingUser.id,
-            },
-        };
+        const token = getUserToken(existingUser);
     
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "1h",
-        });
-    
-        res.cookie("jwt", token, {
-            httpOnly: true,
-            secure: true,
-            maxAge: 3600000,
-            sameSite: "none",
-        });
+        // res.cookie("jwt", token, {
+        //     httpOnly: true,
+        //     secure: true,
+        //     maxAge: 3600000,
+        //     sameSite: "none",
+        // });
     
         res.status(200).json({
             message: "Connexion réussie !",
-            user: {
-                id: existingUser.id,
-                name: existingUser.name,
-            }
+            logged: true,
+            token
         });
-
-        // // On enregistre le user dans la session (dans une première version)
-        // // VERSION AMELIOREE POSSIBLE: on pourrait stocker dans la session uniquement l'id du user
-        // // et faire un appel en DB pour récupérer les infos dont on a besoin dans un middleware dédié uniquement sur les routes qui en ont besoin
-        // req.session.user = {
-        //     id: existingUser.id,
-        //     firstname: existingUser.firstname,
-        //     lastname: existingUser.lastname,
-        //     email: existingUser.email,
-        //     role: existingUser.role
-        // };
-
-        
 
         } catch (error) {
         console.log(error);
@@ -173,8 +157,7 @@ const userController = {
     },
 
     logout(req, res) {
-        // On supprime le user de la session
-        req.session.user = null;
+        // res.clearCookie("jwt")
         // et on renvoie une réponse JSON indiquant que l'utilisateur a été déconnecté
         res.json({ message: "Utilisateur déconnecté" });
     }
