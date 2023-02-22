@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../sequelize-client");
+const sequelize = require("./sequelize-client");
 
 class Stretch extends Model {}
 
