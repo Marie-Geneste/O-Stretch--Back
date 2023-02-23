@@ -111,6 +111,7 @@ const userController = {
             }
         });
 
+
         // Si le user n'existe pas, on renvoie un message d'erreur
         if(!existingUser) {
             return res.status(400).json({ errorMessage: "Email ou mot de passe incorrect" });
