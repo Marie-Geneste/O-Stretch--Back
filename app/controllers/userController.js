@@ -4,24 +4,13 @@ const emailValidator = require("email-validator");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-function getUserToken(user){
-    const payload = {
-        sub: user.id,
-    };
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-    });
-
-    return token;
-};
 
 const userController = {
 
     async handleSignUpFormSubmission(req, res) {
         // On destructure le body pour récupérer plus facilement toutes les valeurs dans des variables
         const {
-            name,
+            username,
             email,
             password,
             passwordConfirm
@@ -30,7 +19,7 @@ const userController = {
 
         // Vérification que tous les champs soient remplis
         // Dans le cas contraire, renvoie d'un message à l'utilisateur pour lui dire que les champs sont incomplets
-        if(!name || !email || !password || !passwordConfirm) {
+        if(!username || !email || !password || !passwordConfirm) {
             return res.status(400).json({ errorMessage: "Veuillez remplir tous les champ" });
         }
 
@@ -71,25 +60,15 @@ const userController = {
 
             // On stocke l'utilisateur en DB avec toutes ses infos
             const newUser = await User.create({
-                name,
+                username,
                 email,
                 password: hashedPassword
             });
-
-            const token = getUserToken(newUser);
-        
-            // res.cookie("jwt", token, {
-            //     httpOnly: true,
-            //     secure: true,
-            //     maxAge: 3600000,
-            //     sameSite: "strict",
-            // });
         
             res.status(201).json({
-            token,
             user: {
                 id: newUser.id,
-                name: newUser.name,
+                name: newUser.username,
                 email: newUser.email,
             },
             });
@@ -134,7 +113,14 @@ const userController = {
             return res.status(400).json({ errorMessage: "Email ou mot de passe incorrect" });
         }
 
-        const token = getUserToken(existingUser);
+        //Utilisatation d'un token avec jwt pour enregistrer le user et l'envoyer au front
+        const payload = {
+            sub: existingUser.id,
+        };
+    
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
     
         // res.cookie("jwt", token, {
         //     httpOnly: true,
@@ -145,7 +131,6 @@ const userController = {
     
         res.status(200).json({
             message: "Connexion réussie !",
-            logged: true,
             token
         });
 

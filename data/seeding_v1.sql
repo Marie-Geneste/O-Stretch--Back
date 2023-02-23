@@ -6,8 +6,8 @@ ALTER TABLE "stretch" DROP CONSTRAINT stretch_category_id_fkey;
 
 TRUNCATE TABLE "user" CASCADE;
 
-INSERT INTO "user" ("id", "email", "password", "username", "biography", "role_id") VALUES
-    (1, 'marie.e.geneste@gmail.com', '$2b$10$7WDPLMcEOov3yv8fC2kJUOXSEz93/tGTRU8J4V51E3d69kb/dRA1e', 'Stretchy', 'blabla', 1);
+INSERT INTO "user" ("id", "email", "password", "username", "biography", "role_id") VALUES 
+    (0,'marie.e.geneste@gmail.com', '$2b$10$7WDPLMcEOov3yv8fC2kJUOXSEz93/tGTRU8J4V51E3d69kb/dRA1e', 'Stretchy', 'blabla', 1);
 
 TRUNCATE TABLE "stretch" CASCADE;
 
@@ -57,7 +57,7 @@ INSERT INTO "role" ("id", "name") VALUES
 TRUNCATE TABLE "user_stretch" CASCADE;
 
 INSERT INTO "user_stretch" ("user_id", "stretch_id") VALUES
-(1, 1);
+(0, 1);
 
 ALTER TABLE "user" ADD FOREIGN KEY ("role_id") REFERENCES "role"("id");
 
