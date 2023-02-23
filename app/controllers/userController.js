@@ -157,6 +157,24 @@ const userController = {
         // res.clearCookie("jwt")
         // et on renvoie une réponse JSON indiquant que l'utilisateur a été déconnecté
         res.json({ message: "Utilisateur déconnecté" });
+    },
+
+    //middleware pour récupérer l'id du user dans le token
+    getUserIdFromToken(req,res,next){
+        //récupérer le token dans le header authorisation
+
+        // récupérer l'id du token
+        const userId = 1;
+        req.userId = userId;
+        next();
+    },
+
+    //middleware qui récupère les info du user à partir de l'id précédent
+    getUserInfo(req,res){
+        const userId = req.userId;
+        //trouver l'user correspondant à l'id
+        //renvoyer le user trouvé dans la réponse json
+        res.json({userId})
     }
 };
 

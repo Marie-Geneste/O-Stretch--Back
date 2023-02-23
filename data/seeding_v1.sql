@@ -37,11 +37,11 @@ INSERT INTO "stretch" ("id", "title", "description_content", "main_image", "desc
     (11, 'Grand dorsal','Se mettre dans la posture de l''enfant (au sol, recroquevillé, les genoux et cuisses en dessous du tronc).Tendre les bras au dessus de la tête, le plus loin possible.','','', 6),
     (12, 'Psoas','Faire une fente avec la jambe arrière assez loin en gardant le dos droit. Mettre une main derrière la hanche de la jambe arrière et mettre une pression pour engager cette hanche vers l''avant.','','', 7),
     (13, 'Fessiers','Assis au sol, croiser les jambes avec une tendus et l''autre pliée avec le pied à côté du genou de la jambe tendue. Tourner le tronc du côté de la jambe pliée et poser le coude opposé sur le genou de la jambe pliée.','','', 8),
-    (14, 'piriforme','Allongé sur le dos, croiser une jambe sur l''autre : une cheville posée sur le genou de l''autre. Attraper la jambe d''appui en dessous et derrière le genou afin de la faire basculer au dessus du tronc.','','', 8),
+    (14, 'Piriforme','Allongé sur le dos, croiser une jambe sur l''autre : une cheville posée sur le genou de l''autre. Attraper la jambe d''appui en dessous et derrière le genou afin de la faire basculer au dessus du tronc.','','', 8),
     (15, 'Adducteur','Assis au sol, écarter les jambes en papillon. Poser les coudes sur les genoux et abaisser le tronc.','','', 9),
     (16, 'Quadriceps','Plier le genou et agripper la cheville avec la main du même côté, puis tirer doucement en direction du fessier. Le genou doit pointer vers le sol.','','', 9),
     (17, 'Ischio-jambier','Assis sur le sol, tendre une jambe et plier l''autre. Essayer d''attraper le pied de la jambe tendue avec la main.','','', 9),
-    (18, 'triceps sural','Debout, tendre une jambe et se pencher en avant pour attraper avec la main le pied de la jambe tendue.','','',10),
+    (18, 'Triceps sural','Debout, tendre une jambe et se pencher en avant pour attraper avec la main le pied de la jambe tendue.','','',10),
     (19, 'Inversion','Faire une pointe avec le pied avec les orteils vers l''intérieur','','', 11 ),
     (20, 'Eversion ','Basculer le pied côté externe en faisant une flexion dorsale (orienté le pied vers l''extérieur et le haut).','','', 11);
 
