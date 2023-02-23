@@ -6,7 +6,8 @@ const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 
-const router = require("./app/routers");
+const stretchRouter = require("./app/routers/stretchRouter");
+const userRouter = require("./app/routers/userRouter");
 
 // Créer l'app
 const app = express();
@@ -31,14 +32,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //multer
-const multer = require("multer");
-const bodyParser = multer();
+// const multer = require("multer");
+// const bodyParser = multer();
 
 // on utlise .none() pour dire qu'on attends pas de fichier, uniquement des inputs "classiques" !
-app.use( bodyParser.none() );
+// app.use( bodyParser.none() );
 
 // Router
-app.use(router);
+app.use("/stretches", stretchRouter);
+app.use(userRouter);
 
 // Lancer l'app
 const port = process.env.PORT || 3000;

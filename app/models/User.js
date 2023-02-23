@@ -21,7 +21,6 @@ User.init({
     },
     role_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
     }
 }, {
     sequelize,
