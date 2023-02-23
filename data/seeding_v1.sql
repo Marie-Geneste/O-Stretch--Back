@@ -1,16 +1,28 @@
+/*Début/lancement du script */
 BEGIN;
 
+/*Permet de modifier la table user existante et de drop la contrainte user_role_id_fkey */
 ALTER TABLE "user" DROP CONSTRAINT user_role_id_fkey;
 
+/*Permet de modifier la table stretch existante et de drop la contrainte stretch_category_id_fkey */
 ALTER TABLE "stretch" DROP CONSTRAINT stretch_category_id_fkey;
 
+/* TRUNCATE -- vide une table ou un ensemble de tables */
+/* CASCADE -- vidde toutes les tables qui ont des références de clés étrangères sur une des tables nommées */
+/* Donc vide la table user */
 TRUNCATE TABLE "user" CASCADE;
 
+/* Insertion/seeding des données dans la table user : en l'occurence ici un user */
 INSERT INTO "user" ("id", "email", "password", "username", "biography", "role_id") VALUES 
     (0,'marie.e.geneste@gmail.com', '$2b$10$7WDPLMcEOov3yv8fC2kJUOXSEz93/tGTRU8J4V51E3d69kb/dRA1e', 'Stretchy', 'blabla', 1);
 
+
+/* Donc vide la table stretch */
 TRUNCATE TABLE "stretch" CASCADE;
 
+/* Insertion/seeding des données dans la table stretch : en l'occurence ici tous nos étirements avec dans l'odre : */
+/* Son id, son titre, son description_content, sa main_image, son description_image et son category_id */
+/*VALUES = les valeurs */
 INSERT INTO "stretch" ("id", "title", "description_content", "main_image", "description_image", "category_id") VALUES
     (1, 'Trapèze', 'Poser une main sur une épaule afin de la maintenir vers le bas. Incliner la tête du côté opposé et ,tout en gardant l''inclinaison, pencher la tête en avant.', '', '', 1),
     (2, 'SCOM (Sterno-Cléïdo-Occipito-Mastoïdien)', 'Pour étirer le SCOM droit (par exemple) : Poser les doigts de la main gauche sur la clavicule droite (partie centrale). Basculer la tête en arrière (extension) et tourner la tête à droite.', '', '', 1),
@@ -33,8 +45,10 @@ INSERT INTO "stretch" ("id", "title", "description_content", "main_image", "desc
     (19, 'Inversion','Faire une pointe avec le pied avec les orteils vers l''intérieur','','', 11 ),
     (20, 'Eversion ','Basculer le pied côté externe en faisant une flexion dorsale (orienté le pied vers l''extérieur et le haut).','','', 11);
 
+/* Donc vide la table category */
 TRUNCATE TABLE "category" CASCADE;
 
+/* Insertion/seeding des données dans la table category */
 INSERT INTO "category" ("id", "name") VALUES
     (1, 'Cou'),
     (2, 'Bras'),
@@ -48,19 +62,29 @@ INSERT INTO "category" ("id", "name") VALUES
     (10, 'Jambe'),
     (11, 'Pied');
 
+/* Donc vide la table role */
 TRUNCATE TABLE "role" CASCADE;
-    
+
+/* Insertion/seeding des données dans la table role */
 INSERT INTO "role" ("id", "name") VALUES
 (1, 'admin'),
 (2, 'user');
 
+/* Donc vide la table role */
 TRUNCATE TABLE "user_stretch" CASCADE;
 
+/* Insertion/seeding des données dans la table user_stretch */
 INSERT INTO "user_stretch" ("user_id", "stretch_id") VALUES
 (0, 1);
 
+
+/* Ajoute une contrainte de clé étrangère à la table "user" qui référence la colonne "id" de la table "role". 
+Cela signifie que la valeur de la colonne "role_id" de la table "user" doit correspondre à une valeur existante dans la colonne "id" de la table "role".*/
 ALTER TABLE "user" ADD FOREIGN KEY ("role_id") REFERENCES "role"("id");
 
+/* Ajoute une contrainte de clé étrangère à la table "stretch" qui référence la colonne "id" de la table "category". 
+Cela signifie que la valeur de la colonne "category_id" de la table "stretch" doit correspondre à une valeur existante dans la colonne "id" de la table "category".*/
 ALTER TABLE "stretch" ADD FOREIGN KEY ("category_id") REFERENCES "category"("id");
 
+/*Fin du script */
 COMMIT;
