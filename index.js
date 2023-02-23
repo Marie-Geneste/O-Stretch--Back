@@ -6,8 +6,7 @@ const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 
-const stretchRouter = require("./app/routers/stretchRouter");
-const userRouter = require("./app/routers/userRouter");
+const router = require("./app/routers");
 
 // Créer l'app
 const app = express();
@@ -39,8 +38,7 @@ app.use(express.json());
 // app.use( bodyParser.none() );
 
 // Router
-app.use("/stretches", stretchRouter);
-app.use(userRouter);
+app.use(router);
 
 // Lancer l'app
 const port = process.env.PORT || 3000;
