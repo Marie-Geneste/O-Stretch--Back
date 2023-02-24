@@ -172,7 +172,7 @@ const userController = {
         try {
             //vérifier la validité du token et décoder son contenu pour récupérer l'id du user
             const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-            const userId = decodedToken.userId;
+            const userId = decodedToken.sub;
             req.userId = userId;
             next();
         //Si il y a une erreur , res.status + error
@@ -188,7 +188,56 @@ const userController = {
         const userFound = await User.findByPk(userId);
         //renvoyer le user trouvé dans la réponse json
         res.json({userFound})
+    },
+
+    async updateUser (req, res){
+        //on destructure les infos du user
+        const { email, username, password } = req.body;
+
+        if (! email && ! username && ! password) { // Si le client veut faire un update sans préciser aucun nouveau champ pour la carte, on bloque.
+            return res.status(400).json({ error: "Invalid body. Should provide at least a 'content', 'color', 'position'  or 'list_id' property" });
+        }
+
+        const userId = req.userId;
+        //trouver l'user correspondant à l'id
+        const userToUpdate = await User.findByPk(userId);
+
+        if (email !== undefined) { // Si il y a un nouveau mail
+            userToUpdate.email = email;
+        }
+    
+        if (username !== undefined) { // Si il y a une nouvelle position
+            userToUpdate.username = username;
+        }
+    
+        if (color !== undefined) { // Si il y a une nouvelle couleur
+            userToUpdate.password = password;
+        }
+    
+        await userToUpdate.save();
+    
+        // Réponse
+        res.status(200).json(userToUpdate);
+    },
+
+    async deleteUser(req, res) {
+        const userId = req.userId;
+        //trouver l'user correspondant à l'id
+        const userToDelete = await User.findByPk(userId);
+    
+        if (! userToDelete) {
+            return res.status(404).json({ error: "User not found. Please verify the provided id." });
+        }
+    
+        await userToDelete.destroy(); // On oublie pas le await, sinon, si ça pête l'utilisateur aura eu la 204 alors que ça pète à posteriori
+    
+        // Réponse
+        res.status(204).end();
     }
 };
 
 module.exports = userController;
+
+
+
+
