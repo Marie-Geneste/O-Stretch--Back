@@ -195,7 +195,7 @@ const userController = {
         const { email, username, password } = req.body;
 
         if (! email && ! username && ! password) { // Si le client veut faire un update sans préciser aucun nouveau champ pour la carte, on bloque.
-            return res.status(400).json({ error: "Invalid body. Should provide at least a 'content', 'color', 'position'  or 'list_id' property" });
+            return res.status(400).json({ error: "Invalid body. Should provide at least a 'username', 'email' or 'password' property" });
         }
 
         const userId = req.userId;
@@ -206,11 +206,11 @@ const userController = {
             userToUpdate.email = email;
         }
     
-        if (username !== undefined) { // Si il y a une nouvelle position
+        if (username !== undefined) { // Si il y a une nouveau pseudo
             userToUpdate.username = username;
         }
     
-        if (color !== undefined) { // Si il y a une nouvelle couleur
+        if (password !== undefined) { // Si il y a une nouveau mdp
             userToUpdate.password = password;
         }
     
@@ -229,7 +229,7 @@ const userController = {
             return res.status(404).json({ error: "User not found. Please verify the provided id." });
         }
     
-        await userToDelete.destroy(); // On oublie pas le await, sinon, si ça pête l'utilisateur aura eu la 204 alors que ça pète à posteriori
+        await userToDelete.destroy(); 
     
         // Réponse
         res.status(204).end();
