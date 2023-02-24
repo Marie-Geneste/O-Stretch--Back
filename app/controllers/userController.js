@@ -157,6 +157,37 @@ const userController = {
         // res.clearCookie("jwt")
         // et on renvoie une réponse JSON indiquant que l'utilisateur a été déconnecté
         res.json({ message: "Utilisateur déconnecté" });
+    },
+
+    //middleware pour récupérer l'id de l'utilisateur à partir d'un token d'authentification JWT
+    getUserIdFromToken(req,res,next){
+        //récupérer le token dans le header authorisation
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(' ')[1];
+        //message d'erreur si token non trouvé
+        if (!token) {
+            return res.status(401).json({ message: 'Token missing' });
+        }
+    
+        try {
+            //vérifier la validité du token et décoder son contenu pour récupérer l'id du user
+            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+            const userId = decodedToken.userId;
+            req.userId = userId;
+            next();
+        //Si il y a une erreur , res.status + error
+        } catch (error) {
+            res.status(401).json({ message: 'Invalid token' });
+        }
+    },
+
+    //middleware qui récupère les info du user à partir de l'id précédent
+    async getUserInfo(req,res){
+        const userId = req.userId;
+        //trouver l'user correspondant à l'id
+        const userFound = await User.findByPk(userId);
+        //renvoyer le user trouvé dans la réponse json
+        res.json({userFound})
     }
 };
 
