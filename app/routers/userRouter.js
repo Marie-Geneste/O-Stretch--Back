@@ -8,6 +8,9 @@ const router = express.Router();
 // routes pour l'utilisateur
 router.get('/user/me',  userController.getUserIdFromToken, userController.getUserInfo);
 router.post('/user',  userController.handleSignUpFormSubmission);
+router.patch('/user/me',  userController.getUserIdFromToken, userController.updateUser);
+router.delete('/user/me',  userController.getUserIdFromToken, userController.deleteUser);
+
 router.post('/login',  userController.handleLoginFormSubmission);
 
 
