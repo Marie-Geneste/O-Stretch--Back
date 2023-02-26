@@ -1,5 +1,4 @@
-"use strict"
-
+//"use strict"
 const { User } = require("../models");
 
 const emailValidator = require("email-validator");
@@ -197,11 +196,14 @@ const userController = {
         res.json({ userFound })
     },
 
+
+    //middleware pour l'update  d'un user.
     async updateUser(req, res) {
         //on destructure les infos du user
         const { email, username, password, passwordConfirm } = req.body;
 
-        if (!email && !username && !password) { // Si le client veut faire un update sans préciser aucun nouveau champs, on bloque.
+    // Si le client veut faire un update sans préciser aucun nouveau champs, on bloque.
+        if (!email && !username && !password) { 
             return res.status(400).json({ error: "Invalid body. Should provide at least a 'username', 'email' or 'password' property" });
         }
 
@@ -209,18 +211,24 @@ const userController = {
         //trouver l'user correspondant à l'id
         const userToUpdate = await User.findByPk(userId);
 
-        if (email !== undefined) { // Si il y a un nouveau mail
+        // Si il y a un nouveau mail
+        if (email !== undefined) {
             userToUpdate.email = email;
         }
 
-        if (username !== undefined) { // Si il y a une nouveau pseudo
+        // Si il y a une nouveau pseudo
+        if (username !== undefined) { 
             userToUpdate.username = username;
         }
 
-        if (password !== undefined) { // Si il y a une nouveau mdp
+        // Si il y a une nouveau mdp
+        if (password !== undefined) { 
+
+            //Si le password ,n'est pas égal au confirm mot de passe, renvoi une erreur à l'utilisateur.
             if (password !== passwordConfirm) {
                 return res.status(400).json({ errorMessage: `La confirmation de mot de passe ne correspond pas au mot de passe renseigné` });
             }
+            //Hash du nouveau password
             const hashedPassword = await hashPassword(password);
             userToUpdate.password = hashedPassword;
         }
@@ -236,6 +244,7 @@ const userController = {
         //trouver l'user correspondant à l'id
         const userToDelete = await User.findByPk(userId);
 
+        // Si User n'est pas "connu" renvoi une erreur a l'utilisateur
         if (!userToDelete) {
             return res.status(404).json({ error: "User not found. Please verify the provided id." });
         }
