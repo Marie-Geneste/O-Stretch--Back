@@ -15,7 +15,7 @@ TRUNCATE TABLE "user" CASCADE;
 /* Insertion/seeding des données dans la table user : en l'occurence ici un user */
 INSERT INTO "user" ("id", "email", "password", "username", "biography", "role_id") VALUES 
     (0,'marie.e.geneste@gmail.com', '$2b$10$7WDPLMcEOov3yv8fC2kJUOXSEz93/tGTRU8J4V51E3d69kb/dRA1e', 'Stretchy', 'blabla', 1);
-
+    
 
 /* Donc vide la table stretch */
 TRUNCATE TABLE "stretch" CASCADE;
