@@ -115,6 +115,4 @@ const stretchController = {
 };
 
 
-
-
-    module.exports = stretchController;
+module.exports = stretchController;
