@@ -24,21 +24,26 @@ const stretchController = {
                 title,
                 description_content, 
                 main_image, 
-                description_image
+                description_image,
+                category_id,
             } = req.body;
 
             const newStretch = await Stretch.create({ 
                 title,
                 description_content, 
                 main_image, 
-                description_image }); 
+                description_image,
+                category_id
+            }); 
             
             res.status(201).json({
                 stretch: {
+                    id: newStretch.id,
                     title: newStretch.title,
                     description_content: newStretch.description_content,
                     main_image: newStretch.main_image,
-                    description_image: newStretch.description_image
+                    description_image: newStretch.description_image,
+                    category_id: newStretch.category_id
                 },
             });
 
@@ -52,14 +57,14 @@ const stretchController = {
     // Mise à jour de l'étirement avec l'identifiant spécifié
     async updateStretch(req, res) {
 
-        const { title, description_content, main_image, description_image } = req.body;
+        const { title, description_content, main_image, description_image, category_id } = req.body;
 
         // Si aucun champs n'est modifié,
-        if (!title && !description_content && !main_image && !description_image) {
-            return res.status(400).json({ error: "Invalid body. Should provide at least a 'title', 'description_content', 'main_image' or 'description_image' property" });
+        if (!title && !description_content && !main_image && !description_image && !category_id) {
+            return res.status(400).json({ error: "Invalid body. Should provide at least a 'title', 'description_content', 'main_image', 'description_image' or 'category_id' property" });
         }
 
-        const stretchId = req.stretchId;
+        const stretchId = req.params.id;
         //trouver l'user correspondant à l'id
         const stretchToUpdate = await Stretch.findByPk(stretchId);
 
@@ -77,6 +82,10 @@ const stretchController = {
 
         if (description_image !== undefined) { // Si il y a une nouveau pseudo
             stretchToUpdate.description_image = description_image;
+        }
+
+        if (category_id !== undefined) { // Si il y a une nouveau pseudo
+            stretchToUpdate.category_id = category_id;
         }
 
         await stretchToUpdate.save();
@@ -103,7 +112,7 @@ const stretchController = {
             }
         },
 
-  };
+};
 
 
 
