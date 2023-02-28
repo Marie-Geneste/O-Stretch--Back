@@ -3,6 +3,9 @@ const express = require('express');
 // on importe nos controllers
 const userController = require('../controllers/userController');
 
+//Controller pour les favoris
+//const FavoriteStretchController = require('../controllers/FavoriteStretchController');
+
 const router = express.Router();
 
 // routes pour l'utilisateur
@@ -13,6 +16,8 @@ router.delete('/user/me',  userController.getUserIdFromToken, userController.del
 
 router.post('/login',  userController.handleLoginFormSubmission);
 
+//Route pour les favoris 
+//router.post('/favorite-stretch', FavoriteStretchController.addFavoriteStretch);
 
 // on exporte le router 
 module.exports = router;
