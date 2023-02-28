@@ -6,9 +6,9 @@ const stretchController = require('../controllers/stretchController');
 const router = express.Router();
 
 // récupération des stretch
-router.get('/stretches',  stretchController.getAllStretches);
+router.get('/',  stretchController.getAllStretches);
 router.post("/stretches", stretchController.createStretch);
-router.put("//stretches/:id", stretchController.updateStretch)
+router.put("/stretches/:id", stretchController.updateStretch)
 router.delete("/stretches/:id", stretchController.deleteStretch);
 
 // on exporte le router 
