@@ -1,4 +1,4 @@
-const UserStretch = require('../models').user_stretch;
+const {UserStretch} = require('../models');
 
 const stretchController = {
 
