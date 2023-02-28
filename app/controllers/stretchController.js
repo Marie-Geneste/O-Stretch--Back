@@ -10,7 +10,7 @@ const stretchController = {
             const stretches = await Stretch.findAll();
             res.status(200).json(stretches);
 
-            // Permet d'intercepter les potentielles erreurs lors de la récupération des étirements      
+        // Permet de d'indique que le serveur a rencontré un problème inattendu qui l'empêche de répondre à la requête.         
         } catch (error) {
             console.log(error);
             return res.status(500).json({ error: "Internal server error" });
@@ -20,12 +20,32 @@ const stretchController = {
     //Middleware pour la création d'un étirement.
     async createStretch(req, res) {
         try {
-            const { title, description_content, main_image, description_image } = req.body;
-            const newStretch = await Stretch.create({ title, description_content, main_image, description_image });
-            res.status(201).json(newStretch);
+            const {
+                title,
+                description_content, 
+                main_image, 
+                description_image
+            } = req.body;
+
+            const newStretch = await Stretch.create({ 
+                title,
+                description_content, 
+                main_image, 
+                description_image }); 
+            
+            res.status(201).json({
+                stretch: {
+                    title: newStretch.title,
+                    description_content: newStretch.description_content,
+                    main_image: newStretch.main_image,
+                    description_image: newStretch.description_image
+                },
+            });
+
+        // Permet de d'indique que le serveur a rencontré un problème inattendu qui l'empêche de répondre à la requête. 
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ error: "Internal server error" });
+            return res.status(500).json({ errorMessage: "Erreur serveur" });
         }
     },
 
@@ -36,10 +56,10 @@ const stretchController = {
 
         // Si aucun champs n'est modifié,
         if (!title && !description_content && !main_image && !description_image) {
-            return res.status(400).json({ error: "Invalid body. Should provide at least a 'username', 'email' or 'password' property" });
+            return res.status(400).json({ error: "Invalid body. Should provide at least a 'title', 'description_content', 'main_image' or 'description_image' property" });
         }
 
-        const stretchId = req.userId;
+        const stretchId = req.stretchId;
         //trouver l'user correspondant à l'id
         const stretchToUpdate = await Stretch.findByPk(stretchId);
 
@@ -58,7 +78,6 @@ const stretchController = {
         if (description_image !== undefined) { // Si il y a une nouveau pseudo
             stretchToUpdate.description_image = description_image;
         }
-
 
         await stretchToUpdate.save();
 
