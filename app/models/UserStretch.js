@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("./sequelize-client");
 
-class Favorite extends Model {}
+class UserStretch extends Model {}
 
-Favorite.init({
+UserStretch.init({
     user_id: {
         type: DataTypes.INTEGER,
         allowNull: false
@@ -14,11 +14,11 @@ Favorite.init({
     }
 }, {
     sequelize,
-    tableName: "user"
+    tableName: "user_stretch"
 });
 
 
-module.exports = Favorite;
+module.exports = UserStretch;
 
 
 

@@ -7,7 +7,7 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 
 const router = require("./app/routers");
-const userMiddleware = require("./app/middleware/userMiddleware");
+// const userMiddleware = require("./app/middleware/userMiddleware");
 
 // Créer l'app
 const app = express();
@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //Token parsing
 //req.token en global si jamais il y a
-app.use(userMiddleware.decodedToken);
+// app.use(userMiddleware.decodedToken);
 
 //multer
 // const multer = require("multer");
