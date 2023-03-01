@@ -29,6 +29,8 @@ app.use(limiter);
 // Body parsing middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+//Token parsing
+//req.token en global si jamais il y a
 
 //multer
 // const multer = require("multer");
