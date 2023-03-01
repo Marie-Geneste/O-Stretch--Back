@@ -1,3 +1,4 @@
+-- SQLBook: Code
 /*Début/lancement du script */
 BEGIN;
 
