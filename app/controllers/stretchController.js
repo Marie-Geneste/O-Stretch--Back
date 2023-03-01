@@ -18,10 +18,12 @@ const stretchController = {
     },
 
     async getOneStretch(req, res) {
-
+        
         // On récupère un seul étirement dans la base de données
         try {
-            const stretch = await Stretch.findOne();
+            const stretchId = req.params.id;
+            //trouver l'user correspondant à l'id
+            const stretch = await Stretch.findByPk(stretchId);
             res.status(200).json(stretch);
 
         // Permet de d'indique que le serveur a rencontré un problème inattendu qui l'empêche de répondre à la requête.         
