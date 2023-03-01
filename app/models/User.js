@@ -27,5 +27,8 @@ User.init({
     tableName: "user"
 });
 
+User.getFavorites = function (user_id){ 
+    //requete à la main
+}
 
 module.exports = User;
