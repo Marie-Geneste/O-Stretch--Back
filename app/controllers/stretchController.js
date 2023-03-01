@@ -90,31 +90,31 @@ const stretchController = {
 
         await stretchToUpdate.save();
 
-            // Réponse
-            res.status(204).end();
-        },
+        // Réponse
+        res.status(204).end();
+    },
 
 
     // suppression de l'étirement avec l'identifiant spécifié
     async deleteStretch(req, res) {
 
-            try {
-                const stretchId = req.params.id;
-                const stretch = await Stretch.findByPk(stretchId);
-                if (!stretch) {
-                    return res.status(404).json({ error: "Stretch not found" });
-                }
-                await stretch.destroy();
-                res.status(204).end();
-            } catch (error) {
-                console.log(error);
-                return res.status(500).json({ error: "Internal server error" });
+        try {
+            const stretchId = req.params.id;
+            const stretch = await Stretch.findByPk(stretchId);
+            if (!stretch) {
+                return res.status(404).json({ error: "Stretch not found" });
             }
-        },
+            await stretch.destroy();
+            res.status(204).end();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+    },
 
 };
 
 
 
 
-    module.exports = stretchController;
+module.exports = stretchController;
