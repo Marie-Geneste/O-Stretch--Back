@@ -17,6 +17,21 @@ const stretchController = {
         }
     },
 
+    async getOneStretch(req, res) {
+
+        // On récupère un seul étirement dans la base de données
+        try {
+            const stretch = await Stretch.findOne();
+            res.status(200).json(stretch);
+
+        // Permet de d'indique que le serveur a rencontré un problème inattendu qui l'empêche de répondre à la requête.         
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+    },
+
+
     //Middleware pour la création d'un étirement.
     async createStretch(req, res) {
         try {
