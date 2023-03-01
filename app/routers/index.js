@@ -12,7 +12,7 @@ const router = Router();
 
 // On branches les sous routeurs
 router.use("/stretches", stretchRouter);
-router.use(userRouter);
+router.use("/user", userRouter);
 
 
 // On exporte le routeur principal

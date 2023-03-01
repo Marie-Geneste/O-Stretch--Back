@@ -9,10 +9,10 @@ const userController = require('../controllers/userController');
 const router = express.Router();
 
 // routes pour l'utilisateur
-router.get('/user/me',  userController.getUserIdFromToken, userController.getUserInfo);
-router.post('/user',  userController.handleSignUpFormSubmission);
-router.patch('/user/me',  userController.getUserIdFromToken, userController.updateUser);
-router.delete('/user/me',  userController.getUserIdFromToken, userController.deleteUser);
+router.post('/',  userController.handleSignUpFormSubmission);
+router.get('/me',  userController.getUserIdFromToken, userController.getUserInfo);
+router.patch('/me',  userController.getUserIdFromToken, userController.updateUser);
+router.delete('/me',  userController.getUserIdFromToken, userController.deleteUser);
 
 router.post('/login',  userController.handleLoginFormSubmission);
 

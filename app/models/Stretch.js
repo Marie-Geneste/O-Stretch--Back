@@ -22,10 +22,10 @@ Stretch.init({
         type: DataTypes.INTEGER,
         allowNull: false
     }
-    }, {
-        sequelize,
-        tableName: "stretch"
-    });
+}, {
+    sequelize,
+    tableName: "stretch"
+});
 
 
 module.exports = Stretch;
