@@ -135,6 +135,7 @@ const userController = {
             //Utilisatation d'un token avec jwt pour enregistrer le user et l'envoyer au front
             const payload = {
                 sub: existingUser.id,
+                isAdmin: existingUser.role_id === 1
             };
 
             const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -167,26 +168,26 @@ const userController = {
     },
 
     //middleware pour récupérer l'id de l'utilisateur à partir d'un token d'authentification JWT
-    getUserIdFromToken(req, res, next) {
-        //récupérer le token dans le header authorisation
-        const authHeader = req.headers.authorization;
-        const token = authHeader && authHeader.split(' ')[1];
-        //message d'erreur si token non trouvé
-        if (!token) {
-            return res.status(401).json({ message: 'Token missing' });
-        }
+    // getUserIdFromToken(req, res, next) {
+    //     //récupérer le token dans le header authorisation
+    //     const authHeader = req.headers.authorization;
+    //     const token = authHeader && authHeader.split(' ')[1];
+    //     //message d'erreur si token non trouvé
+    //     if (!token) {
+    //         return res.status(401).json({ message: 'Token missing' });
+    //     }
 
-        try {
-            //vérifier la validité du token et décoder son contenu pour récupérer l'id du user
-            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-            const userId = decodedToken.sub;
-            req.userId = userId;
-            next();
-            //Si il y a une erreur , res.status + error
-        } catch (error) {
-            res.status(401).json({ message: 'Invalid token' });
-        }
-    },
+    //     try {
+    //         //vérifier la validité du token et décoder son contenu pour récupérer l'id du user
+    //         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    //         const userId = decodedToken.sub;
+    //         req.userId = userId;
+    //         next();
+    //         //Si il y a une erreur , res.status + error
+    //     } catch (error) {
+    //         res.status(401).json({ message: 'Invalid token' });
+    //     }
+    // },
 
     //middleware qui récupère les info du user à partir de l'id précédent
     async getUserInfo(req, res) {
@@ -199,30 +200,21 @@ const userController = {
 
     async updateUser(req, res) {
         //on destructure les infos du user
-        const { email, username, password, passwordConfirm } = req.body;
+        const {  username,  biography } = req.body;
 
-        if (!email && !username && !password) { // Si le client veut faire un update sans préciser aucun nouveau champs, on bloque.
-            return res.status(400).json({ error: "Invalid body. Should provide at least a 'username', 'email' or 'password' property" });
-        }
-
+        // if (!email && !username && !password) { // Si le client veut faire un update sans préciser aucun nouveau champs, on bloque.
+        //     return res.status(400).json({ error: "Invalid body. Should provide at least a 'username', 'email' or 'password' property" });
+        // }
         const userId = req.userId;
         //trouver l'user correspondant à l'id
         const userToUpdate = await User.findByPk(userId);
-
-        if (email !== undefined) { // Si il y a un nouveau mail
-            userToUpdate.email = email;
-        }
 
         if (username !== undefined) { // Si il y a une nouveau pseudo
             userToUpdate.username = username;
         }
 
-        if (password !== undefined) { // Si il y a une nouveau mdp
-            if (password !== passwordConfirm) {
-                return res.status(400).json({ errorMessage: `La confirmation de mot de passe ne correspond pas au mot de passe renseigné` });
-            }
-            const hashedPassword = await hashPassword(password);
-            userToUpdate.password = hashedPassword;
+        if (biography !== undefined) { // Si il y a une nouveau pseudo
+            userToUpdate.biography = biography;
         }
 
         await userToUpdate.save();

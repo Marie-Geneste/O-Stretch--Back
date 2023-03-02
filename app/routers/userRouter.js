@@ -2,6 +2,7 @@ const express = require('express');
 
 // on importe nos controllers
 const userController = require('../controllers/userController');
+const userMiddleware = require('../middleware/userMiddleware');
 
 //Controller pour les favoris
 //const FavoriteStretchController = require('../controllers/FavoriteStretchController');
@@ -9,10 +10,11 @@ const userController = require('../controllers/userController');
 const router = express.Router();
 
 // routes pour l'utilisateur
-router.post('/',  userController.handleSignUpFormSubmission);
-router.get('/me',  userController.getUserIdFromToken, userController.getUserInfo);
-router.patch('/me',  userController.getUserIdFromToken, userController.updateUser);
-router.delete('/me',  userController.getUserIdFromToken, userController.deleteUser);
+router.post('/user',  userController.handleSignUpFormSubmission);
+router.get('/user/me',  userMiddleware.isUserLogged, userController.getUserInfo);
+router.patch('/user/me',  userMiddleware.isUserLogged, userController.updateUser);
+router.delete('/user/me',  userMiddleware.isUserLogged, userController.deleteUser);
+
 
 router.post('/login',  userController.handleLoginFormSubmission);
 
