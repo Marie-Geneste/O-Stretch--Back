@@ -17,7 +17,7 @@ const favoriteController = {
         }
     },
 
-    addFavoriteStretch: async (req, res) => {
+    addOneFavorite: async (req, res) => {
         try {
             const userId = req.token.sub;
             const stretchId = req.params.id
@@ -45,7 +45,7 @@ const favoriteController = {
     },
 
 
-    deleteFavoriteStretch: async (req, res) => {
+    deleteOneFavorite: async (req, res) => {
         try {
             const userId = req.token.sub;
             const stretchId = req.params.id;
@@ -62,7 +62,7 @@ const favoriteController = {
             // Supprimez le favori pour cet utilisateur
             await favoriteStretch.destroy();
 
-            return res.status(204).send();
+            return res.status(204).end();
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error deleting favorite' });

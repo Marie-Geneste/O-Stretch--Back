@@ -191,7 +191,7 @@ const userController = {
 
     //middleware qui récupère les info du user à partir de l'id précédent
     async getUserInfo(req, res) {
-        const userId = req.userId;
+        const userId = req.token.sub;
         //trouver l'user correspondant à l'id
         const userFound = await User.findByPk(userId);
         //renvoyer le user trouvé dans la réponse json
@@ -205,7 +205,7 @@ const userController = {
         // if (!email && !username && !password) { // Si le client veut faire un update sans préciser aucun nouveau champs, on bloque.
         //     return res.status(400).json({ error: "Invalid body. Should provide at least a 'username', 'email' or 'password' property" });
         // }
-        const userId = req.userId;
+        const userId = req.token.sub;
         //trouver l'user correspondant à l'id
         const userToUpdate = await User.findByPk(userId);
 
@@ -224,7 +224,7 @@ const userController = {
     },
 
     async deleteUser(req, res) {
-        const userId = req.userId;
+        const userId = req.token.sub;
         //trouver l'user correspondant à l'id
         const userToDelete = await User.findByPk(userId);
 
