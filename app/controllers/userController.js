@@ -199,11 +199,11 @@ const userController = {
 
     async updateUser(req, res) {
         //on destructure les infos du user
-        const { email, username, password, passwordConfirm } = req.body;
+        const { email, username, password, biography } = req.body;
 
-        if (!email && !username && !password) { // Si le client veut faire un update sans préciser aucun nouveau champs, on bloque.
-            return res.status(400).json({ error: "Invalid body. Should provide at least a 'username', 'email' or 'password' property" });
-        }
+        // if (!email && !username && !password) { // Si le client veut faire un update sans préciser aucun nouveau champs, on bloque.
+        //     return res.status(400).json({ error: "Invalid body. Should provide at least a 'username', 'email' or 'password' property" });
+        // }
 
         const userId = req.userId;
         //trouver l'user correspondant à l'id
@@ -218,11 +218,15 @@ const userController = {
         }
 
         if (password !== undefined) { // Si il y a une nouveau mdp
-            if (password !== passwordConfirm) {
-                return res.status(400).json({ errorMessage: `La confirmation de mot de passe ne correspond pas au mot de passe renseigné` });
-            }
+            // if (password !== passwordConfirm) {
+            //     return res.status(400).json({ errorMessage: `La confirmation de mot de passe ne correspond pas au mot de passe renseigné` });
+            // }
             const hashedPassword = await hashPassword(password);
             userToUpdate.password = hashedPassword;
+        }
+
+        if (biography !== undefined) { // Si il y a une nouveau pseudo
+            userToUpdate.biography = username;
         }
 
         await userToUpdate.save();

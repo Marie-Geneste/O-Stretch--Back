@@ -11,6 +11,7 @@ UserStretch.init({
     
     stretches_id: {
         type: DataTypes.INTEGER,
+        allowNull: false
     }
 }, {
     sequelize,

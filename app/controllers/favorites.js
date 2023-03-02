@@ -1,6 +1,6 @@
 const {UserStretch} = require('../models');
 
-const stretchController = {
+const favorites = {
 
     addFavoriteStretch: async (req, res) => {
         try {
@@ -30,4 +30,4 @@ const stretchController = {
 };
 
 
-module.exports = stretchController;
+module.exports = favorites;
