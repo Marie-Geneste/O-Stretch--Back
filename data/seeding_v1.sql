@@ -75,8 +75,9 @@ INSERT INTO "role" ("id", "name") VALUES
 TRUNCATE TABLE "user_stretch" CASCADE;
 
 /* Insertion/seeding des données dans la table user_stretch */
-INSERT INTO "user_stretch" ("user_id", "stretch_id") VALUES
-(0, 1);
+INSERT INTO "user_stretch" ("id", "user_id", "stretch_id") VALUES
+(1, 0, 1),
+(2, 0, 2);
 
 
 /* Ajoute une contrainte de clé étrangère à la table "user" qui référence la colonne "id" de la table "role". 

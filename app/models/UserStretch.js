@@ -9,7 +9,7 @@ UserStretch.init({
         allowNull: false
     },
     
-    stretches_id: {
+    stretch_id: {
         type: DataTypes.INTEGER,
         allowNull: false
     }
