@@ -73,5 +73,4 @@ const favoriteController = {
 };
 
 
-
 module.exports = favoriteController;
