@@ -135,6 +135,7 @@ const userController = {
             //Utilisatation d'un token avec jwt pour enregistrer le user et l'envoyer au front
             const payload = {
                 sub: existingUser.id,
+                isAdmin: existingUser.role_id === 1
             };
 
             const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -167,26 +168,26 @@ const userController = {
     },
 
     //middleware pour récupérer l'id de l'utilisateur à partir d'un token d'authentification JWT
-    getUserIdFromToken(req, res, next) {
-        //récupérer le token dans le header authorisation
-        const authHeader = req.headers.authorization;
-        const token = authHeader && authHeader.split(' ')[1];
-        //message d'erreur si token non trouvé
-        if (!token) {
-            return res.status(401).json({ message: 'Token missing' });
-        }
+    // getUserIdFromToken(req, res, next) {
+    //     //récupérer le token dans le header authorisation
+    //     const authHeader = req.headers.authorization;
+    //     const token = authHeader && authHeader.split(' ')[1];
+    //     //message d'erreur si token non trouvé
+    //     if (!token) {
+    //         return res.status(401).json({ message: 'Token missing' });
+    //     }
 
-        try {
-            //vérifier la validité du token et décoder son contenu pour récupérer l'id du user
-            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-            const userId = decodedToken.sub;
-            req.userId = userId;
-            next();
-            //Si il y a une erreur , res.status + error
-        } catch (error) {
-            res.status(401).json({ message: 'Invalid token' });
-        }
-    },
+    //     try {
+    //         //vérifier la validité du token et décoder son contenu pour récupérer l'id du user
+    //         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    //         const userId = decodedToken.sub;
+    //         req.userId = userId;
+    //         next();
+    //         //Si il y a une erreur , res.status + error
+    //     } catch (error) {
+    //         res.status(401).json({ message: 'Invalid token' });
+    //     }
+    // },
 
     //middleware qui récupère les info du user à partir de l'id précédent
     async getUserInfo(req, res) {
