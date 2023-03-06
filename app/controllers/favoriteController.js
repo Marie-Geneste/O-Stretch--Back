@@ -23,7 +23,7 @@ const favoriteController = {
     addOneFavorite: async (req, res) => {
         try {
             const userId = req.token.sub;
-            const stretchId = req.params.id
+            const stretchId = req.params.id;
 
             // Vérifiez si le favori existe déjà pour cet utilisateur
             const favoriteStretch = await UserStretch.findOne({

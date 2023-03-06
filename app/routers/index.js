@@ -5,6 +5,7 @@ const { Router } = require("express");
 const stretchRouter = require("./stretchRouter");
 const userRouter = require("./userRouter");
 const favoriteRouter = require("./favoriteRouter");
+const contactRouter = require("./contactRouter");
 
 
 // Création du router principal
@@ -15,6 +16,7 @@ const router = Router();
 router.use("/stretches", stretchRouter);
 router.use("/", userRouter);
 router.use("/user/me/stretches", favoriteRouter);
+router.use("/", contactRouter);
 
 
 // On exporte le routeur principal
