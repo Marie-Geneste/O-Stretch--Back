@@ -1,11 +1,12 @@
 BEGIN;
 
+
 CREATE TABLE "advice" (
         "id" SERIAL PRIMARY KEY,
         "description_content" TEXT NOT NULL
     );
 
-INSERT INTO "stretch" ("id", "description_content") VALUES
+INSERT INTO "advice" ("id", "description_content") VALUES
 (1,'Avant de faire du sport, pas d’étirements mais un échauffement actif.'),
 (2,'Ne vous forcez jamais et ne vous poussez jamais au-delà de vos limites.'),
 (3,'Étirez uniformément les deux côtés de votre corps.'),
