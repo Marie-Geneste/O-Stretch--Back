@@ -8,7 +8,15 @@ const stretchController = {
         // On récupère la liste des étirements depuis la DB à partir du model Sequelize
         try {
             const stretches = await Stretch.findAll();
-            res.status(200).json(stretches);
+            //utilisation du .map pour mettre que les infos utilisés côté front
+            const filtredStretches = stretches.map(etirement => {
+                return {
+                    title: etirement.title,
+                    main_image: etirement.main_image,
+                    categorie_id: etirement.category_id
+                };
+            });
+            res.status(200).json(filtredStretches);
 
         // Permet de d'indique que le serveur a rencontré un problème inattendu qui l'empêche de répondre à la requête.         
         } catch (error) {

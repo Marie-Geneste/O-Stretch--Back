@@ -9,6 +9,7 @@ const favoriteController = {
             const favorites = await UserStretch.findAll({
                 where: { user_id: userId }
             });
+            console.log(favorites)
             const favoriteTable = favorites.map(favori => favori.stretch_id);
             const promises = favoriteTable.map(stretchFavorite => Stretch.findByPk(stretchFavorite));
             const favoritesList = await Promise.all(promises);

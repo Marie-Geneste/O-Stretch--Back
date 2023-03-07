@@ -135,7 +135,7 @@ const userController = {
             //Utilisatation d'un token avec jwt pour enregistrer le user et l'envoyer au front
             const payload = {
                 sub: existingUser.id,
-                isAdmin: existingUser.role_id === 1
+                isAdmin: existingUser.role_id
             };
 
             const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -194,8 +194,11 @@ const userController = {
         const userId = req.token.sub;
         //trouver l'user correspondant à l'id
         const userFound = await User.findByPk(userId);
+        //refactoriser avec le rest operator pour envoyer qu'une partie des données
+        // eslint-disable-next-line no-unused-vars
+        const { id, email, password, ...filtredUserInfo } = { id: userFound.id, email: userFound.email, password: userFound.password, username : userFound.username, biography : userFound.biography, role_id: userFound.role_id};
         //renvoyer le user trouvé dans la réponse json
-        res.json({ userFound })
+        res.json({ filtredUserInfo })
     },
 
     async updateUser(req, res) {

@@ -46,7 +46,7 @@ const userMiddleware = {
     //vérifier si la personne est admin req.token.role_id
     isAdmin(req,res,next) {
 
-        if (req.token.isAdmin) {
+        if (req.token.isAdmin === 1) {
             next()
         } else {
             res.status(403).json({ message: 'Access denied' });
