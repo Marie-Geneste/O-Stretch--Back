@@ -11,6 +11,7 @@ const stretchController = {
             //utilisation du .map pour mettre que les infos utilisés côté front
             const filtredStretches = stretches.map(etirement => {
                 return {
+                    id : etirement.id,
                     title: etirement.title,
                     main_image: etirement.main_image,
                     categorie_id: etirement.category_id

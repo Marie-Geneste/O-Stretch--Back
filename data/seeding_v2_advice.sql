@@ -1,10 +1,11 @@
 BEGIN;
 
-
 CREATE TABLE "advice" (
         "id" SERIAL PRIMARY KEY,
         "description_content" TEXT NOT NULL
     );
+
+TRUNCATE TABLE "advice" CASCADE;
 
 INSERT INTO "advice" ("id", "description_content") VALUES
 (1,'Avant de faire du sport, pas d’étirements mais un échauffement actif.'),

@@ -10,9 +10,9 @@ const router = express.Router();
 router.get('/',  stretchController.getAllStretches);
 router.get('/:id',  stretchController.getOneStretch);
 
-router.post("/",  userMiddleware.isAdmin, stretchController.createStretch);
-router.put("/:id", userMiddleware.isAdmin, stretchController.updateStretch)
-router.delete("/:id", userMiddleware.isAdmin, stretchController.deleteStretch);
+router.post("/",  userMiddleware.isUserLogged, userMiddleware.isAdmin, stretchController.createStretch);
+router.patch("/:id", userMiddleware.isUserLogged, userMiddleware.isAdmin, stretchController.updateStretch)
+router.delete("/:id", userMiddleware.isUserLogged, userMiddleware.isAdmin, stretchController.deleteStretch);
 
 // on exporte le router 
 module.exports = router;

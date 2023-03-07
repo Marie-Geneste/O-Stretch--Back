@@ -88,5 +88,10 @@ ALTER TABLE "user" ADD FOREIGN KEY ("role_id") REFERENCES "role"("id");
 Cela signifie que la valeur de la colonne "category_id" de la table "stretch" doit correspondre à une valeur existante dans la colonne "id" de la table "category".*/
 ALTER TABLE "stretch" ADD FOREIGN KEY ("category_id") REFERENCES "category"("id");
 
+-- Note : Postgres, avec le fait d'ajouter IDENTITY BY DEFAULT au lieu de ALWAYS, ne met pas à jour le curseur de l'incrément de la séquence de façon implicite !
+-- Il faut donc mettre à jour la valeur courante de chacune des séquences en séléctionnant l'id maximum de chaque table une fois le seeding terminé.
+SELECT setval('stretch_id_seq', (SELECT MAX(id) from "stretch"));
+SELECT setval('user_stretch_id_seq', (SELECT MAX(id) from "user_stretch"));
+
 /*Fin du script */
 COMMIT;
