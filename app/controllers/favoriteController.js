@@ -24,12 +24,13 @@ const favoriteController = {
         try {
             const userId = req.token.sub;
             const stretchId = req.params.id
+        
 
             // Vérifiez si le favori existe déjà pour cet utilisateur
             const favoriteStretch = await UserStretch.findOne({
                 where: { user_id: userId, stretch_id: stretchId }
             });
-
+            
             if (favoriteStretch) {
                 return res.status(409).json({ message: 'Already in favorites' });
             }
@@ -39,7 +40,7 @@ const favoriteController = {
                 user_id: userId,
                 stretch_id: stretchId
             });
-
+            
             return res.status(201).json(newFavorite);
         } catch (error) {
             console.error(error);
