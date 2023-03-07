@@ -1,11 +1,13 @@
 BEGIN;
 
+DROP TABLE IF EXISTS "advice";
+
 CREATE TABLE "advice" (
         "id" SERIAL PRIMARY KEY,
         "description_content" TEXT NOT NULL
     );
 
-TRUNCATE TABLE "advice" CASCADE;
+
 
 INSERT INTO "advice" ("id", "description_content") VALUES
 (1,'Avant de faire du sport, pas d’étirements mais un échauffement actif.'),
@@ -30,5 +32,7 @@ INSERT INTO "advice" ("id", "description_content") VALUES
 (20,'L''étirement ne doit pas être douloureux, il faut sentir une légère mise en tension musculaire.'),
 (21,'Etirez-vous de manière bilatérale (droite et gauche).'),
 (22,'Lors de l’étirement vous pouvez vous aider de votre respiration, maintenant le segment du membre sur l''inspiration et progressez sur l''expiration.');
+
+TRUNCATE TABLE "advice" CASCADE;
 
 COMMIT;
