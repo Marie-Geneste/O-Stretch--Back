@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS "user",
 
 /* Création de la table role */
 CREATE TABLE "role" (
+
         "id" SERIAL PRIMARY KEY,
         "name" VARCHAR(12)
     );
@@ -25,6 +26,7 @@ CREATE TABLE "role" (
 /* Création de la table user */
 
 CREATE TABLE "user" (
+
         "id" SERIAL PRIMARY KEY,
         "email" email NOT NULL UNIQUE,
         "password" VARCHAR NOT NULL,
@@ -36,6 +38,7 @@ CREATE TABLE "user" (
 /* Création de la table category */
 
 CREATE TABLE "category" (
+
         "id" SERIAL PRIMARY KEY,
         "name" VARCHAR(255) NOT NULL
     );
@@ -43,6 +46,7 @@ CREATE TABLE "category" (
 /* Création de la table stretch */
 
 CREATE TABLE "stretch" (
+
         "id" SERIAL PRIMARY KEY,
         "title" VARCHAR(255) NOT NULL NOT NULL,
         "description_content" TEXT NOT NULL,
@@ -54,6 +58,7 @@ CREATE TABLE "stretch" (
 /* Création de la table de jointure user_stretch car il y a relation N, N entre la table "user" et "stretch" */
 
 CREATE TABLE "user_stretch" (
+
         "id" SERIAL PRIMARY KEY,
         "user_id" INTEGER NOT NULL REFERENCES "user"("id"),
         "stretch_id" INTEGER NOT NULL REFERENCES "stretch"("id"),
