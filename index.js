@@ -16,7 +16,7 @@ const app = express();
 
 // On autorise les requêtes Cross-Origin, qui par défaut seraient bloquées.
 app.use(cors({
-    origin: "*",
+    origin: ["https://ostretch-back.up.railway.app"],
 }));
 
 // On limite le nombre de requête des clients
