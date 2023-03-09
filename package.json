@@ -1,0 +1,37 @@
+{
+  "name": "projet-06-o-stretch-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/O-clock-Maya/projet-06-o-stretch-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/O-clock-Maya/projet-06-o-stretch-back/issues"
+  },
+  "homepage": "https://github.com/O-clock-Maya/projet-06-o-stretch-back#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "email-validator": "^2.0.4",
+    "express": "^4.18.2",
+    "express-jwt": "^8.4.1",
+    "express-rate-limit": "^6.7.0",
+    "jsonwebtoken": "^9.0.0",
+    "nodemailer": "^6.9.1",
+    "pg": "^8.9.0",
+    "sequelize": "^6.28.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.34.0"
+  }
+}
