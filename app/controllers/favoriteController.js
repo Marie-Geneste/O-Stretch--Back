@@ -1,19 +1,15 @@
-const { Stretch } = require("../models");
+const { User, Stretch } = require("../models");
 const UserStretch = require("../models/UserStretch");
 
 
 const favoriteController = {
+
     getAllFavorites: async (req, res) => {
         const userId = req.token.sub;
         try {
-            const favorites = await UserStretch.findAll({
-                where: { user_id: userId }
-            });
+            const favorites = await User.findByPk(userId, { include: Stretch });
             console.log(favorites)
-            const favoriteTable = favorites.map(favori => favori.stretch_id);
-            const promises = favoriteTable.map(stretchFavorite => Stretch.findByPk(stretchFavorite));
-            const favoritesList = await Promise.all(promises);
-            res.status(200).json(favoritesList);
+            res.status(200).json(favorites.Stretches);
         } catch (error) {
             console.log(error);
             return res.status(500).json({ error: "Internal server error" });

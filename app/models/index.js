@@ -27,6 +27,11 @@ Stretch.belongsTo(Category, {
     as: 'category',
 });
 
+User.belongsToMany(Stretch, {
+    through: "user_stretch",
+});
+
+
 
 
 module.exports = { User, Category, Stretch, Role };

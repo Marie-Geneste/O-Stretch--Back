@@ -75,9 +75,9 @@ INSERT INTO "role" ("id", "name") VALUES
 TRUNCATE TABLE "user_stretch" CASCADE;
 
 /* Insertion/seeding des données dans la table user_stretch */
-INSERT INTO "user_stretch" ("id", "user_id", "stretch_id") VALUES
-(1, 0, 1),
-(2, 0, 2);
+INSERT INTO "user_stretch" ("user_id", "stretch_id") VALUES
+(0, 1),
+(0, 2);
 
 
 /* Ajoute une contrainte de clé étrangère à la table "user" qui référence la colonne "id" de la table "role". 
@@ -91,7 +91,6 @@ ALTER TABLE "stretch" ADD FOREIGN KEY ("category_id") REFERENCES "category"("id"
 -- Note : Postgres, avec le fait d'ajouter IDENTITY BY DEFAULT au lieu de ALWAYS, ne met pas à jour le curseur de l'incrément de la séquence de façon implicite !
 -- Il faut donc mettre à jour la valeur courante de chacune des séquences en séléctionnant l'id maximum de chaque table une fois le seeding terminé.
 SELECT setval('stretch_id_seq', (SELECT MAX(id) from "stretch"));
-SELECT setval('user_stretch_id_seq', (SELECT MAX(id) from "user_stretch"));
 
 /*Fin du script */
 COMMIT;

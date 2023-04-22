@@ -5,28 +5,21 @@ const { User } = require("../models");
 const emailValidator = require("email-validator");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const sanitizeHtml = require('sanitize-html');
 
-
+// Function to hash a given password
 async function hashPassword(password) {
-    // Hash du mot de passe pour qu'il ne soit plus en clair
-    const saltRounds = 10; // 10 représente le nombre de "round" de complexité pour générer le salt
-    // On génère d'abord un salt qui va permettre de faire en sorte que deux mdp identiques ne donnent pas le meme hash en sortie
+    const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
-    // Ensuite seulement on peut hasher le mdp avec le salt généré (qui sera du coup toujours différent et UNIQUE)
     const hashedPassword = await bcrypt.hash(password, salt);
     return hashedPassword;
 }
 
 const userController = {
 
-    // Methode pour le formulaire d'inscription (recuperer les infos du front verifications de tous les champs du formulaire)
-    // Vérification de l'email(deja utilisé), vérification du match entre le mdp/et confirmer le mdp.
-    // Hash du mot de passe ( salt puis hash)
-    // Stockage de l'utilisateur en base de donnée
-    // Création du token
-    // Gestion de la validation : ok ou alors error
+    // Function to handle sign up form submission
     async handleSignUpFormSubmission(req, res) {
-        // On destructure le body pour récupérer plus facilement toutes les valeurs dans des variables
+
         const {
             username,
             email,
@@ -34,50 +27,49 @@ const userController = {
             passwordConfirm
         } = req.body;
 
+        // Sanitize user inputs to prevent XSS attacks
+        const cleanUsername = sanitizeHtml(username);
+        const cleanEmail = sanitizeHtml(email);
 
-        // Vérification que tous les champs soient remplis
-        // Dans le cas contraire, renvoie d'un message à l'utilisateur pour lui dire que les champs sont incomplets
-        if (!username || !email || !password || !passwordConfirm) {
-            return res.status(400).json({ errorMessage: "Veuillez remplir tous les champ" });
+        // Check if all fields are filled
+        if (!cleanUsername || !cleanEmail || !password || !passwordConfirm) {
+            return res.status(400).json({ errorMessage: "Please fill in all fields" });
         }
 
-        // Vérification de la validation du format de l'email
-        if (!emailValidator.validate(email)) {
-            return res.status(400).json({ errorMessage: "Format d'email non valide" });
+        // Validate email format
+        if (!emailValidator.validate(cleanEmail)) {
+            return res.status(400).json({ errorMessage: "Invalid email format" });
         }
 
-        // Vérification du couple mdp / confirmation de mdp
+        // Check if password and password confirmation match
         if (password !== passwordConfirm) {
-            return res.status(400).json({ errorMessage: `La confirmation de mot de passe ne correspond pas au mot de passe renseigné` });
+            return res.status(400).json({ errorMessage: `Password confirmation does not match the password entered` });
         }
-        // Comme à partir d'ici on contacte un service extérieur qui nous renvoie une promesse (l'appel à la DB)
-        // on utilise le try / catch pour pouvoir gérer un éventuel rejet de la promesse avec une erreur
+
         try {
-            // Vérification que l'email sur lequel l'utilisateur souhaite s'enregistrer n'est pas déjà utilisé dans la DB
+
+            // Check if the user already exists
             const alreadyExistingUser = await User.findOne({
                 where: {
-                    email
+                    email: cleanEmail
                 }
             });
 
             if (alreadyExistingUser) {
-                return res.status(400).json({ errorMessage: `L'email ${email} est déjà utilisé` });
+                return res.status(400).json({ errorMessage: `The email ${cleanEmail} is already in use` });
             }
 
-            // Vérification du couple mdp / confirmation de mdp
-            if (password !== passwordConfirm) {
-                return res.status(400).json({ errorMessage: `La confirmation de mot de passe ne correspond pas au mot de passe renseigné` });
-            }
-
+            // Hash the user's password
             const hashedPassword = await hashPassword(password);
 
-            // On stocke l'utilisateur en DB avec toutes ses infos
+            // Create a new user
             const newUser = await User.create({
-                username,
-                email,
+                username: cleanUsername,
+                email: cleanEmail,
                 password: hashedPassword
             });
 
+            // Send a success response with user information
             res.status(201).json({
                 user: {
                     id: newUser.id,
@@ -89,7 +81,7 @@ const userController = {
         } catch (error) {
             console.log(error);
 
-            res.status(500).json({ errorMessage: "Erreur serveur" });
+            res.status(500).json({ errorMessage: "Server error" });
         }
     },
 
